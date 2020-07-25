@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block body %}
+    {{ super() }}
+
+    <div class="container">
+        <h1 class="mt-5">Welcome, {{ user_data["fullname"] }}</h1>
+        <br>
+
+        <p>Queue for the following:</p>
+    </div>
+
+{% endblock %}
