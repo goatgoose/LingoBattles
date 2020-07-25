@@ -10,6 +10,7 @@ class User(UserMixin):
         self._is_authenticated = False
 
         self.sid = None
+        self.current_game = None
 
     def login(self, password):
         try:

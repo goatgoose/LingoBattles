@@ -40,6 +40,12 @@ def connected():
         current_user.sid = request.sid
 
 
+@socketio.on("submit_solution")
+def submit_solution(data):
+    user = users[current_user.get_id()]
+    user.game.submit_solution(user, data["challenge"], data["solution"])
+
+
 @socketio.on("disconnect")
 def disconnect():
     current_user.namespace = None
@@ -57,9 +63,11 @@ def queue(language, lesson_url_name):
     if games.get(language) is None:
         games[language] = {}
     if games[language].get(lesson_url_name) is None:
-        game = Game(users[current_user.get_id()])
+        user = users[current_user.get_id()]
+        game = Game(socketio, user, user.lingo.lesson_info[lesson_url_name])
         games[language][lesson_url_name] = game
         game_ids[game.id] = game
+        user.current_game = game
         return render_template("queue.html", lesson_info=current_user.lingo.lesson_info[lesson_url_name])
     else:
         game = games[language][lesson_url_name]
@@ -68,12 +76,16 @@ def queue(language, lesson_url_name):
                 "id": game.id
             }, room=user.sid)
         game.add_user(users[current_user.get_id()])
+        users[current_user.get_id()].current_game = game
         return redirect("/game/" + str(game.id))
 
 
 @app.route("/game/<_id>")
 def play_game(_id):
     game = game_ids[_id]
+    if users[current_user.get_id()] not in game.users:
+        return 403
+
     return render_template("game.html", game=game)
 
 
