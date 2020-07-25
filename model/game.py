@@ -1,8 +1,11 @@
+import uuid
 
 
 class Game:
     def __init__(self, owner):
         self.owner = owner
+
+        self.id = str(uuid.uuid1())
 
         self.users = []
         self.add_user(self.owner)

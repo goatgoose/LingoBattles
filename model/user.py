@@ -1,5 +1,6 @@
 from flask_login import UserMixin, login_user
 import duolingo
+from flask_socketio import emit
 
 
 class User(UserMixin):
@@ -8,7 +9,7 @@ class User(UserMixin):
         self.lingo = None
         self._is_authenticated = False
 
-        self.namespace = None
+        self.sid = None
 
     def login(self, password):
         try:
