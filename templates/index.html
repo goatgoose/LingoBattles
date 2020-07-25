@@ -9,13 +9,15 @@
 
         <p>Queue for the following:</p>
         <div class="list-group">
-            {% for lesson in user_data["currentCourse"]["skills"] %}
-                {% if lesson[0]["finishedLevels"] == lesson[0]["levels"] %}
-                    <a href="/queue/{{ user_data["currentCourse"]["learningLanguage"] }}/{{ lesson[0]["urlName"] }}"
-                       class="list-group-item list-group-item-action">
-                        {{ lesson[0]["name"] }}
-                    </a>
-                {% endif %}
+            {% for lesson_arr in user_data["currentCourse"]["skills"] %}
+                {% for lesson in lesson_arr %}
+                    {% if lesson["finishedLevels"] > 0 %}
+                        <a href="/queue/{{ user_data["currentCourse"]["learningLanguage"] }}/{{ lesson["urlName"] }}"
+                           class="list-group-item list-group-item-action">
+                            {{ lesson["name"] }}
+                        </a>
+                    {% endif %}
+                {% endfor %}
             {% endfor %}
         </div>
     </div>

@@ -8,6 +8,8 @@ class User(UserMixin):
         self.lingo = None
         self._is_authenticated = False
 
+        self.namespace = None
+
     def login(self, password):
         try:
             self.lingo = duolingo.Duolingo(self.username, password)
