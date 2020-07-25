@@ -11,6 +11,7 @@ class Game:
 
         self.users = []
         self.points = {}  # user : points
+        self.ready = {}  # user : ready/not ready
         self.add_user(self.owner)
 
         self.lesson = self.owner.lingo.get_lesson(self.lesson_name)
@@ -21,6 +22,17 @@ class Game:
     def add_user(self, user):
         self.users.append(user)
         self.points[user] = 0
+        self.ready[user] = False
+
+    def set_ready(self, user):
+        self.ready[user] = True
+
+    @property
+    def all_ready(self):
+        for ready in self.ready.values():
+            if not ready:
+                return False
+        return True
 
     @property
     def winner(self):

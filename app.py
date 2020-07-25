@@ -40,10 +40,20 @@ def connected():
         current_user.sid = request.sid
 
 
+@socketio.on("ready")
+def ready():
+    user = users[current_user.get_id()]
+    game = user.current_game
+    game.set_ready(user)
+    if game.all_ready:
+        game.start_round()
+
+
 @socketio.on("submit_solution")
 def submit_solution(data):
     user = users[current_user.get_id()]
-    user.game.submit_solution(user, data["challenge"], data["solution"])
+    game = user.current_game
+    game.submit_solution(user, data["challenge"], data["solution"])
 
 
 @socketio.on("disconnect")
@@ -64,7 +74,7 @@ def queue(language, lesson_url_name):
         games[language] = {}
     if games[language].get(lesson_url_name) is None:
         user = users[current_user.get_id()]
-        game = Game(socketio, user, user.lingo.lesson_info[lesson_url_name])
+        game = Game(socketio, user, lesson_url_name)
         games[language][lesson_url_name] = game
         game_ids[game.id] = game
         user.current_game = game
