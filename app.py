@@ -32,10 +32,19 @@ def hello_world():
     return render_template("index.html", user_data=current_user.lingo.data)
 
 
+@app.route('/queue/<language>/<lesson_name>')
+@login_required
+def queue(language, lesson_name):
+    return render_template("queue.html", lesson_info=current_user.lingo.lesson_info[lesson_name])
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
-        return render_template("login.html")
+        if current_user.is_authenticated:
+            return redirect('/')
+        else:
+            return render_template("login.html")
     elif request.method == 'POST':
         user = load_user(request.values["username"])
         user.login(request.values["password"])

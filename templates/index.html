@@ -8,6 +8,16 @@
         <br>
 
         <p>Queue for the following:</p>
+        <div class="list-group">
+            {% for lesson in user_data["currentCourse"]["skills"] %}
+                {% if lesson[0]["finishedLevels"] == lesson[0]["levels"] %}
+                    <a href="/queue/{{ user_data["currentCourse"]["learningLanguage"] }}/{{ lesson[0]["urlName"] }}"
+                       class="list-group-item list-group-item-action">
+                        {{ lesson[0]["name"] }}
+                    </a>
+                {% endif %}
+            {% endfor %}
+        </div>
     </div>
 
 {% endblock %}

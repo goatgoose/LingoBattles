@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block body %}
+    {{ super() }}
+
+    <div class="container mt-5">
+        <h1>In queue for {{ lesson_info.name }}...</h1>
+    </div>
+
+{% endblock %}
